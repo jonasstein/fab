@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+
+# -*- coding: utf-8 -*-
+
 import sqlite3
 
 """Testimplematantion of the FAB Project. Come get some!!"""
@@ -26,7 +30,7 @@ def makeDatabaseString():
     
 
 
-print loadDatabase()
+print(loadDatabase())
 
 
 database = sqlite3.connect('/Users/arturbielefeld/Documents/projekte/fab/datab')
