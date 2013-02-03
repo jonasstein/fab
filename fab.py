@@ -91,7 +91,7 @@ class ImportData(Menu):
         return base
     
     def menuentriesimport(self):
-            
+        """menu for import data #TODO ...."""
         menutrig = True
         while menutrig:
             choose = raw_input("Choose your Task:\n Read Database: 1 \n Read vCard: 2 \n back: b \n ::>")
@@ -180,17 +180,20 @@ class Data(Menu):
 class Base(Data):
     """Our Databse Object, an ordinary list..."""
     def __init__(self):
-        self.datab = [["1"],]
+        self.datab = [["idPerson" , "Timestamp" , "Type of Data" , "Name of the database entry" ,"Value of the Database entry"],]
 
     def getDatabase(self):
-        return self.datab
+        """returns a copy of the database"""
+        
+        return self.datab[:]
     
     def storeDataToBase(self, datastore):
-        datasafe = baseobj.getDatabase()[:]
-        print(datasafe)
+        """store something in the database #TODO Verify the structure of the stored data"""
         
-        print(datasafe.append(datastore))    ###TODO WHY is not appending?
-        print(self.datab)
+        datasafe = baseobj.getDatabase()
+        datasafe.append(datastore)
+        self.datab = datasafe
+
         
 
 class person(Menu):
