@@ -5,6 +5,7 @@
 """ 
 
 import sqlite3
+import sys
 
 class FabDatabase:
     """Class uppercase first letter, methods lowercase, underscore
@@ -31,9 +32,11 @@ class FabDatabase:
             print("OperationalError")
         except sqlite3.DatabaseError:
             print("DatabaseError: file is encrypted or is not a database")
-        
+        except:
+            print "Unexpected error:", sys.exc_info()[0]
+            raise
 
-    def store_row(self)
+    def store_row(self):
         """
         """
 
@@ -49,7 +52,7 @@ class FabDatabase:
         """
         """
      
-    
+  
 
     def __del__(self):
         self.conn.commit()
