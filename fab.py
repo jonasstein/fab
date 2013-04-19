@@ -8,7 +8,13 @@ __contributors__ = ""
 """Description:
 """ 
 
-import sqlite
+import sqlite3
+from fsql import FabDatabase
+
+
+def main():
+    fdb = FabDatabase() #if there is a init it would be called here
+    fdb.create_DB("fab.db")
 
 
 
