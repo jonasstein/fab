@@ -3,7 +3,7 @@
 
 __version__ = 0.01 
 __author__ = "Jonas Stein"
-__contributors__ = ""
+__contributors__ = "insert your name here"
 
 """Description:
 """ 
@@ -13,8 +13,9 @@ from fsql import FabDatabase
 
 
 def main():
-    fdb = FabDatabase() #if there is a init it would be called here
-    fdb.create_DB("fab.db")
+    fdb = FabDatabase("fab.db") 
+
+
 
 
 
