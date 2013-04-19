@@ -16,19 +16,10 @@ JS: Create testdata
 
 Structure of database table (example):
 
-    ID TIMESTAMP TYPE FIELDNAME DATA
-    01 1358639061 STRING prename Erika
-    01 1358639061 STRING surname Mustermann
-    01 1358639061 STRING title Dr. rer. nat.
-    01 1358639061 STRING street Musterstraße
-    01 1358639061 STRING housenumber 2
-    01 1358639061 STRING postcode 12345
-    01 1358639061 STRING city Musterhausen
-    01 1358639061 STRING mail em@mustermann.com
-    01 1358639061 STRING phone.office +49 123 4567878 
-    01 1358639061 STRING phone.mobile +49 171 4567878
-    01 1158639061 STRING phone.mobile +49 178 4567878
-    
+SQL Table
+=========
+ID(KEY) UserID Type Valid Priority Value TimeStamp Comment
+
 
 Ideas 
 =====
