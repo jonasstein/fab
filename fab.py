@@ -14,7 +14,7 @@ from fsql import FabDatabase
 
 def main():
     fdb = FabDatabase("fab.db") 
-
+    fdb.init_table()
 
 
 
