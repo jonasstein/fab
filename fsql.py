@@ -2,6 +2,7 @@
 #  -*- coding: utf-8 -*- 
 
 """Description: fsql module
+Handles low level DB instructions.
 """ 
 
 import sqlite3
@@ -26,8 +27,16 @@ class FabDatabase:
         """create new table, if there was no db before
         """
         try:
-            self.conn.execute("CREATE TABLE data" +
-                              "(ID UserID Type Valid Priority Value TimeStamp Comment)")  
+            self.conn.execute('''CREATE TABLE IF NOT EXISTS data(
+								ID INTEGER PRIMARY KEY,
+								UserID INTEGER,
+								Type TEXT,
+								Valid INTEGER,
+								Priority INTEGER,
+								Value TEXT,
+								TimeStamp TEXT,
+								Comment TEXT)''') 
+								
         except sqlite3.OperationalError:    
             print("OperationalError")
         except sqlite3.DatabaseError:
@@ -52,6 +61,9 @@ class FabDatabase:
         """
         """
      
+	 def maxContactID(self):
+		"""Returns the value of the highest ContactID on the DB."""
+		pass
   
 
     def __del__(self):
