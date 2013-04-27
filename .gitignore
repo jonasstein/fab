@@ -1,3 +1,6 @@
+# never store personal addressbook in the public git repository
+*.db
+
 *.py[cod]
 
 # C extensions

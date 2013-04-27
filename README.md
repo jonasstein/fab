@@ -1,20 +1,23 @@
 fab
 ===
 
-Flexible Address Book
+fab stands for Flexible Address Book. 
+It will be shipped with a standard set of keys like "name" but the 
+user may enhance it with own keys like ID's for "jabber" and "ICQ" 
+bank account data and so on.
 
 
 TODO
 ====
 
 AB: parse testdata
-
-JS: Plan datastructure
 JS: Create testdata
 
 
+DONE
+====
+JS: Plan datastructure (done in group meeting on 2013-04-20)
 
-Structure of database table (example):
 
 SQL Table
 =========
@@ -36,4 +39,4 @@ Ideas
  * we want to use python 3
  * [Markdown syntax](http://en.wikipedia.org/wiki/Markdown)
  * how can we format the bank information (in one line)? IBAN+BIC
- * add a version information of the field definition to the database. May be we write `mail.office` instead of `mail` in future
+ * type=phone, subtype=office
