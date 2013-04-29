@@ -15,49 +15,58 @@ class FabDatabase:
     """
 
     def __init__(self, filename):
+        """Connects to the given database. If such database does not exist, it will be created together with an empty table representid the data and another for address book properties mirroring a dictionary."""
+
         try:
             self.conn = sqlite3.connect(filename)
-        except RuntimeError:
-            print("Runtime Error: Could not create new database.")
-
-
-    def delete_DB(self):
-        """delete the file from the database. Close first.
-        """
-
-    def init_table(self):
-        """create new table, if there was no db before
-        """
-        try:
-            self.conn.execute("CREATE TABLE IF NOT EXISTS data(
+            self.conn.execute("""CREATE TABLE IF NOT EXISTS Data(
 								ID INTEGER PRIMARY KEY,
-								UserID INTEGER,
+								ContactID INTEGER,
 								Type TEXT,
 								Valid INTEGER,
 								Priority INTEGER,
 								Value TEXT,
 								TimeStamp TEXT,
-								Comment TEXT)")
+								Comment TEXT)""")
+            self.conn.execute("""CREATE TABLE IF NOT EXISTS Properties(
+                                Key TEXT,
+                                Value TEXT)""")
+            self.conn.commit()
 
         except sqlite3.OperationalError:
             print("OperationalError")
+
         except sqlite3.DatabaseError:
             print("DatabaseError: file is encrypted or is not a database")
-        except:
-            print "Unexpected error:", sys.exc_info()[0]
-            raise
+
+        except RuntimeError:
+            print("Runtime Error: Could not create new database.")
+
+    def __del__(self):
+        self.conn.commit()
+        self.conn.close()
+
+    def delete_DB(self):
+        """Delete the database. Close first.
+        """
 
     def store_row(self, registry):
-        """Inserts a registry from the data table.
+        """Inserts a registry from the data table. Registry must be a tuple.
         """
-        self.conn.execute("INSERT INTO data VALUES (?,?,?,?,?,?,?)", registry)
+        self.conn.execute("INSERT INTO Data VALUES (?,?,?,?,?,?,?)", registry)
         self.conn.commit()
 
     def erase_row(self,ID):
         """Erases a row.
         """
-        self.conn.execute( "DELETE from data where ID = ? ", ID)
+        self.conn.execute( "DELETE FROM Data WHERE ID = ?", [ID,])
         self.conn.commmit()
+
+    def erase_contact(self, ContactID):
+        """Removes all the entries associated with the given ContactID."""
+
+        self.conn.execute("DELETE FROM Data WHERE ContactID = ?", [ContactID,])
+        self.conn.commit()
 
     def read(self):
         """given a set of attr. and ID's return such attr. of ID's
@@ -67,13 +76,10 @@ class FabDatabase:
         """
         """
 
-	 def maxContactID(self):
-		"""Returns the value of the highest ContactID on the DB."""
-		pass
+    def maxContactID(self):
+        """Returns the value of the highest ContactID on the DB."""
+        pass
 
-    def __del__(self):
-        self.conn.commit()
-        self.conn.close()
 
 class FabDatabaseTest(unittest.TestCase):
     """Unittesting database management."""
