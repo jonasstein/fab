@@ -35,7 +35,7 @@ Ideas
     01 1358639061 STRING picture.jpeg EMustermann.jpeg
 
  * the file could be in `~/fab/gfx/EMustermann.jpeg` for example
- * we want to use python 3
+ * we have to use python 2.7 in order to reuse existing modules like vobject
  * [Markdown syntax](http://en.wikipedia.org/wiki/Markdown)
  * how can we format the bank information (in one line)? IBAN+BIC
  * type=phone, subtype=office
