@@ -10,7 +10,6 @@ bank account data and so on.
 TODO
 ====
 
-AB: parse testdata
 JS: Create testdata
 
 
@@ -40,3 +39,4 @@ Ideas
  * [Markdown syntax](http://en.wikipedia.org/wiki/Markdown)
  * how can we format the bank information (in one line)? IBAN+BIC
  * type=phone, subtype=office
+ * we can use import vobject to handle vCard files https://pypi.python.org/pypi/vobject
