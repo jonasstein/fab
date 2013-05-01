@@ -9,7 +9,7 @@ __contributors__ = "Ignacio Vergara"
 It should be executed in a python 2.7 interpreter.
 """
 
-from adressbook import AddressBook
+from addressbook import AddressBook
 
 if __name__ == "__main__":
     print 'Loading database: test'
