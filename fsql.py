@@ -11,27 +11,34 @@ import sys
 class FabDatabaseError:
     pass
 
-class FabDatabase:
-    """Class uppercase first letter, methods lowercase, underscore
-    """
+class FabDataset:
+    def __init__(self):
+        self.fields = {}
+    pass
 
+class FabDatabase:
+    """Represents a database for the fab addressbook.
+    """
+    
+    # fields are specified as (key, SQL type) pairs
+    FAB_FIELDS = [("ID", "INTEGER PRIMARY KEY"),
+                  ("ContactID", "INTEGER"),
+                  ("Type", "TEXT"),
+                  ("Valid", "INTEGER"),
+                  ("Timestamp", "TEXT"),
+                  ("Comment", "TEXT")]
+                   
     def __init__(self, filename):
         """Connects to the given database. If such database does not exist, it will be created together with an empty table representid the data and another for address book properties mirroring a dictionary."""
 
         try:
             self._conn = sqlite3.connect(filename)
-            self._conn.execute("""CREATE TABLE IF NOT EXISTS Data(
-								ID INTEGER PRIMARY KEY,
-								ContactID INTEGER,
-								Type TEXT,
-								Valid INTEGER,
-								Priority INTEGER,
-								Value TEXT,
-								TimeStamp TEXT,
-								Comment TEXT)""")
-            self._conn.execute("""CREATE TABLE IF NOT EXISTS Properties(
-                                Key TEXT,
-                                Value TEXT)""")
+            sql_command = "CREATE TABLE IF NOT EXISTS Data("
+            sql_command = sql_command + ", ".join([" ".join(x) for x in FabDatabase.FAB_FIELDS]) + ")"
+            self._conn.execute(sql_command)
+            #self._conn.execute("""CREATE TABLE IF NOT EXISTS Properties(
+            #                    Key TEXT,
+            #                    Value TEXT)""")
             self._conn.commit()
 
         except sqlite3.OperationalError:
@@ -52,10 +59,16 @@ class FabDatabase:
         pass
 
     def store_row(self, registry):
-        """Inserts a registry from the data table. Registry must be a tuple.
+        """Inserts a registry from the data table. Registry must be a dictionary.
         """
-        self._conn.execute("INSERT INTO Data VALUES (?,?,?,?,?,?,?,?)", registry)
+        template = ",".join(["?"] * len(FabDatabase.FAB_FIELDS)) # generate "?,?,?,?"
+        values = [registry[key] for key, _ in FabDatabase.FAB_FIELDS] # generate values in order
+        self._conn.execute("INSERT INTO Data VALUES (" + template + ")", values)
         self._conn.commit()
+
+    def get_row(self, ID):
+        """Get the dataset with the ID 'ID' """
+        pass
 
     def erase_row(self,ID):
         """Erases a row.
