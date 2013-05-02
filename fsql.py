@@ -68,13 +68,13 @@ class FabDatabase:
 
     def get_row(self, ID):
         """Get the dataset with the ID 'ID' """
-        pass
+        return self._conn.execute("SELECT * FROM Data WHERE ID = ?",[ID,]).next()
 
     def erase_row(self,ID):
         """Erases a row.
         """
         self._conn.execute( "DELETE FROM Data WHERE ID = ?", [ID,])
-        self._conn.commmit()
+        self._conn.commit()
 
     def erase_contact(self, ContactID):
         """Removes all the entries associated with the given ContactID."""
