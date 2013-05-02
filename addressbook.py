@@ -93,6 +93,3 @@ class AddressBook(object):
 
     def exporting(self, name, formating):
         pass
-
-if __name__ == "__main__":
-    unittest.main()
