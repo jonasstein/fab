@@ -8,65 +8,79 @@ Handles low level DB instructions.
 import sqlite3
 import sys
 
-import unittest
+class FabDatabaseError:
+    pass
+
+class FabDataset:
+    def __init__(self):
+        self.fields = {}
+    pass
 
 class FabDatabase:
-    """Class uppercase first letter, methods lowercase, underscore
+    """Represents a database for the fab addressbook.
     """
-
+    
+    # fields are specified as (key, SQL type) pairs
+    FAB_FIELDS = [("ID", "INTEGER PRIMARY KEY"),
+                  ("ContactID", "INTEGER"),
+                  ("Type", "TEXT"),
+                  ("Valid", "INTEGER"),
+                  ("Timestamp", "TEXT"),
+                  ("Comment", "TEXT")]
+                   
     def __init__(self, filename):
         """Connects to the given database. If such database does not exist, it will be created together with an empty table representid the data and another for address book properties mirroring a dictionary."""
 
         try:
-            self.conn = sqlite3.connect(filename)
-            self.conn.execute("""CREATE TABLE IF NOT EXISTS Data(
-								ID INTEGER PRIMARY KEY,
-								ContactID INTEGER,
-								Type TEXT,
-								Valid INTEGER,
-								Priority INTEGER,
-								Value TEXT,
-								TimeStamp TEXT,
-								Comment TEXT)""")
-            self.conn.execute("""CREATE TABLE IF NOT EXISTS Properties(
-                                Key TEXT,
-                                Value TEXT)""")
-            self.conn.commit()
+            self._conn = sqlite3.connect(filename)
+            sql_command = "CREATE TABLE IF NOT EXISTS Data("
+            sql_command = sql_command + ", ".join([" ".join(x) for x in FabDatabase.FAB_FIELDS]) + ")"
+            self._conn.execute(sql_command)
+            #self._conn.execute("""CREATE TABLE IF NOT EXISTS Properties(
+            #                    Key TEXT,
+            #                    Value TEXT)""")
+            self._conn.commit()
 
         except sqlite3.OperationalError:
             print("OperationalError")
+            raise FabDatabaseError
 
         except sqlite3.DatabaseError:
             print("DatabaseError: file is encrypted or is not a database")
-
-        except RuntimeError:
-            print("Runtime Error: Could not create new database.")
+            raise FabDatabaseError
 
     def __del__(self):
-        self.conn.commit()
-        self.conn.close()
+        self._conn.commit()
+        self._conn.close()
 
     def delete_DB(self):
         """Delete the database. Close first.
         """
+        pass
 
     def store_row(self, registry):
-        """Inserts a registry from the data table. Registry must be a tuple.
+        """Inserts a registry from the data table. Registry must be a dictionary.
         """
-        self.conn.execute("INSERT INTO Data VALUES (?,?,?,?,?,?,?)", registry)
-        self.conn.commit()
+        template = ",".join(["?"] * len(FabDatabase.FAB_FIELDS)) # generate "?,?,?,?"
+        values = [registry[key] for key, _ in FabDatabase.FAB_FIELDS] # generate values in order
+        self._conn.execute("INSERT INTO Data VALUES (" + template + ")", values)
+        self._conn.commit()
+
+    def get_row(self, ID):
+        """Get the dataset with the ID 'ID' """
+        return self._conn.execute("SELECT * FROM Data WHERE ID = ?",[ID,]).next()
 
     def erase_row(self,ID):
         """Erases a row.
         """
-        self.conn.execute( "DELETE FROM Data WHERE ID = ?", [ID,])
-        self.conn.commmit()
+        self._conn.execute( "DELETE FROM Data WHERE ID = ?", [ID,])
+        self._conn.commit()
 
     def erase_contact(self, ContactID):
         """Removes all the entries associated with the given ContactID."""
 
-        self.conn.execute("DELETE FROM Data WHERE ContactID = ?", [ContactID,])
-        self.conn.commit()
+        self._conn.execute("DELETE FROM Data WHERE ContactID = ?", [ContactID,])
+        self._conn.commit()
 
     def read(self):
         """given a set of attr. and ID's return such attr. of ID's
@@ -81,19 +95,3 @@ class FabDatabase:
         pass
 
 
-class FabDatabaseTest(unittest.TestCase):
-    """Unittesting database management."""
-
-    def setUp(self):
-        self.db = FabDatabase("test.db")
-
-    def test_insert(self):
-        """Testing row insertion."""
-        pass
-
-    def test_remove(self):
-        """Testing row removal."""
-        pass
-
-if __name__ == "__main__":
-    unittest.main()
