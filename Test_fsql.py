@@ -32,7 +32,7 @@ class FabDatabaseTest(unittest.TestCase):
 
     def test_get_row(self):
         self.db.store_row(self.dic)
-        self.assertEqual(self.db.get_row(1),self.tupel)
+        self.assertEqual(self.db.get_row(1),self.dic)    
 
     def test_erase_row(self):
         self.db.erase_row(1)

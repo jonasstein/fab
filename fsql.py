@@ -36,6 +36,8 @@ class FabDatabase:
             sql_command = "CREATE TABLE IF NOT EXISTS Data("
             sql_command = sql_command + ", ".join([" ".join(x) for x in FabDatabase.FAB_FIELDS]) + ")"
             self._conn.execute(sql_command)
+            
+            # TODO: create 2nd table for metadata
             #self._conn.execute("""CREATE TABLE IF NOT EXISTS Properties(
             #                    Key TEXT,
             #                    Value TEXT)""")
@@ -67,8 +69,17 @@ class FabDatabase:
         self._conn.commit()
 
     def get_row(self, ID):
-        """Get the dataset with the ID 'ID' """
-        return self._conn.execute("SELECT * FROM Data WHERE ID = ?",[ID,]).next()
+        """Get the dataset with the ID 'ID'. Returns a dictionary."""
+        
+        #assume unique ID - take first query result
+        tupel = self._conn.execute("SELECT * FROM Data WHERE ID = ?",[ID,]).next()
+        
+        #build dictionary with keys given in FAB_FIELDS
+        result = {}
+        for fabfield, value in zip(FabDatabase.FAB_FIELDS, tupel):
+            key = fabfield[0]
+            result[key] = value
+        return result
 
     def erase_row(self,ID):
         """Erases a row.
